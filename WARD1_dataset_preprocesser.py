@@ -1,8 +1,18 @@
 import os
 from scipy import io
 import numpy as np
+import pandas as pd
 
 #WARD1
+
+def utils(dataset):
+    
+    temp = dataset[1:,0:3]
+    tuples = list(zip(*temp.transpose()))
+    index = pd.MultiIndex.from_tuples(tuples, names=dataset[0,0:3])
+    df = pd.DataFrame(dataset[1:,3:], index=index, columns=dataset[0,3:])
+    
+    return df
 
 def sliding_window(dataset, window_size, overlay):
     
@@ -101,9 +111,7 @@ def load_set(window_size, overlay):
     
     #print("Data: " + str(data.shape))
     
-    return data
-    
-    
+    return utils(data)
     
     
 def preprocess(window_size, overlay):
