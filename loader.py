@@ -1,53 +1,69 @@
 import os
 from subprocess import call
+import WARD1_dataset_preprocesser as ward
+import opportunity_dataset_preprocessor as opportunity
 
 
-def load_unzip(dataset_info):
+class Loader:
     
-    print("")
-    
-    #Load
-    print("Downloading...")
-    if not os.path.exists(dataset_info[0] + '/' + dataset_info[0] + '.zip'):
-        call(
-            'wget "'+ dataset_info[1] + '" -P "' + dataset_info[0] + '/"',
-            shell=True
-        )
-        print("Downloading done.\n")
-    else:
-        print("Dataset already downloaded. Did not download twice.\n")
+    dataset_name = ""
+    dataset_url = ""
+    dataset_unzip = ""
+
+    def load_unzip(self):
+
+        print("")
+
+        #Load
+        print("Downloading...")
+        if not os.path.exists(self.dataset_name + '/' + self.dataset_name + '.zip'):
+            call(
+                'wget "'+ self.dataset_url + '" -P "' + self.dataset_name + '/"',
+                shell=True
+            )
+            print("Downloading done.\n")
+        else:
+            print("Dataset already downloaded. Did not download twice.\n")
+
+
+        #Unzip
+        print("Extracting...")
+        extract_directory = os.path.abspath(self.dataset_unzip + '/' + self.dataset_unzip)
+        if not os.path.exists(extract_directory):
+            call(
+                'unzip -nq "' + self.dataset_name + '/' + self.dataset_name + '.zip"',
+                shell=True
+            )
+            print("Extracting successfully done to {}.".format(extract_directory))
+        else:
+            print("Dataset already extracted. Did not extract twice.\n")
+
+#Loads and preprocessing calls:
+
+    def ward1_load(self):
+        
+        self.dataset_name = "WARD1"
+        self.dataset_url = "https://people.eecs.berkeley.edu/~yang/software/WAR/WARD1.zip"
+        self.dataset_unzip = "WARD1.0"
+        
+        self.load_unzip()
+        
+        
+    def ward1_preprocess(window_size):
+        return ward.preprocess(window_size,overlay)
       
         
-    #Unzip
-    print("Extracting...")
-    extract_directory = os.path.abspath(dataset_info[0] + '/' + dataset_info[0])
-    if(dataset_info[0] == "WARD1"):
-        extract_directory = extract_directory + '.0'
-    if not os.path.exists(extract_directory):
-        call(
-            'unzip -nq "' + dataset_info[0] + '/' + dataset_info[0] + '.zip"',
-            shell=True
-        )
-        print("Extracting successfully done to {}.".format(extract_directory))
-    else:
-        print("Dataset already extracted. Did not extract twice.\n")
-    
+    def opportunity_load(self):
         
+        self.dataset_name = "OpportunityUCIDataset"
+        self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip"
+        self.dataset_name = "OpportunityUCIDataset"
         
-def dataset_loader(dataset_name):
+        self.load_unzip()
+        
     
-    #get index from name
-    names = {"ward1":0, "opportunityucidataset":1 }
-    
-    #name of the dataset and the download link
-    info = [["WARD1", "https://people.eecs.berkeley.edu/~yang/software/WAR/WARD1.zip"],
-            ["OpportunityUCIDataset","https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip"]]
-    
-    load_unzip(info[names[dataset_name.lower()]])
-    
-    
-    
-    
+    def opportunity_preprocess(window_size):
+        return opportunity.preprocess(window_size,overlay)
     
     
     
