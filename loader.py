@@ -52,8 +52,8 @@ class Loader:
         self.load_unzip()
         
         
-    def ward1_preprocess(window_size, overlay):
-        return ward.preprocess(self, window_size, overlay)
+    def ward1_preprocess(self, window_size, overlay):
+        return ward.preprocess(window_size, overlay)
       
  #OPPORTUNITY dataset
     def opportunity_load(self):
@@ -65,8 +65,12 @@ class Loader:
         self.load_unzip()
         
     
-    def opportunity_preprocess(window_size, overlay):
-        return opportunity.preprocess(self, window_size, overlay)
+    def opportunity_preprocess(self, window_size, overlay):
+        
+        #produces a pickled file for every trial due to some RAM problems
+        
+        return opportunity.preprocess(window_size, overlay)
+    
     
  #REALDISP Activity Recognition Dataset
     def realdisp_load(self):
@@ -83,7 +87,7 @@ class Loader:
 
     
     def enex_load(self):
-
+        
         self.dataset_name = "EnEx"
         self.dataset_url = "https://www5.cs.fau.de/fileadmin/research/datasets/ActivityNet/EnEx.zip"
         self.dataset_unzip = "EnEx"
@@ -92,6 +96,9 @@ class Loader:
         
         
     def enex_preprocess(self, window_size, overlay):
+        
+        #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
+        
         return enex.preprocess(window_size, overlay)
     
 
