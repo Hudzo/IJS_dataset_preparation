@@ -72,7 +72,7 @@ class Loader:
         return opportunity.preprocess(window_size, overlay)
     
     
- #REALDISP Activity Recognition Dataset
+ #REALDISP Activity Recognition Dataset -> not implemented yet
     def realdisp_load(self):
         
         self.dataset_name = "realistic_sensor_displacement"
@@ -83,7 +83,7 @@ class Loader:
         self.load_unzip()
         
  
- #Energy expenditure dataset
+ #Energy expenditure dataset  -> partially implemented, has problems with labels
 
     
     def enex_load(self):

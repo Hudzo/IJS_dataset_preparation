@@ -104,8 +104,6 @@ def load_set(window_size, overlay):
     # add labels and attribute names to the raw data
     data = np.concatenate( (labels, raw_data), axis = 1)
     
-    print("Raw: " + str(raw_data.nbytes / 1024))
-    print("Data: " + str(raw_data.nbytes / 1024))
     
     del labels
     del raw_data
@@ -119,7 +117,7 @@ def load_set(window_size, overlay):
     
     
     #delete rows with missings
-    data.replace(['na','nan','NaN', 'NaT','inf','-inf','nan'], np.nan, inplace = True)
+    data.replace(['na','nan','NaN', 'NaT','inf','-inf','nan', np.inf, -np.inf], np.nan, inplace = True)
     data = data.dropna()
     #just to be sure transform everything to float
     data = data.astype(float)
