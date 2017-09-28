@@ -24,6 +24,7 @@ def get_attribute_names(window_size, overlay):
                     if index == 249 :
                         label_names.append(lines.strip().split(" ")[2])
                     if index > 249:
+                        label_names.append('Trial')
                         break
                     index += 1
 
@@ -89,14 +90,13 @@ def load_set(window_size, overlay):
     activities = []
     data = []
     
-    #TODO!!!!!!!!
     atts = get_attribute_names(window_size, overlay) #get an array of attribute names
 
     
-    #load all subjects TODO (4)
-    for i in range(1,2):
+    #load all subjects TODO
+    for i in range(1,5):
         
-        #all daily activities / drill for a subject TODO (5 + drill)
+        #all daily activities / drill for a subject (5 + drill)
         for j in range(1,7):
             
                 
@@ -110,24 +110,69 @@ def load_set(window_size, overlay):
             #load data
             raw_data = pd.read_csv('OpportunityUCIDataset/OpportunityUCIDataset/dataset/' + fname + '.dat', sep=' ')
             del fname
+            
                 
             #sliding window processing (build the data array)
             data = sliding_window(np.array(raw_data), window_size, overlay)  #numpy array
             del raw_data
             
+            data = np.insert(data, 1, j, axis=1)
+            print("Added trial id collumn")
+            
             data = np.concatenate((np.ones((data.shape[0], 1))*i, data), axis = 1)
-            print("Added subject id collumn")
+            print("Added subject id collumn")   
+              
+            #MAKES THE WHOLE ARRAY TAKE 20 TIMES THE SPACE IT TOOK ONE LINE BEFORE
+            #data = np.concatenate((atts, data), axis = 0)
+            #print("Added collumn names")
             
-            data = np.concatenate((atts, data), axis = 0)
-            print("Added collumn names")
-            
-            data = pd.DataFrame(data[1:,:], columns=data[0,:]) # transform array to indexed dataFrame
+            data = pd.DataFrame(data[1:,:], columns=atts[0,:]) # transform array to indexed dataFrame
             print("Transformed into a dataframe")
+            
             
             pickle.dump(data, open('OpportunityUCIDataset/Subject_'+str(i)+ '-ADL' + str(j) + '_preprocessed.txt','wb'), pickle.HIGHEST_PROTOCOL)
             
             del data
         
+    return 1
+
+
+#concatenate the whole dataset -> might not be the optimal solution -> TODO find a better, more eficient way
+def concat_frames():
+    
+    flag = 0
+    
+    #TODO -> (1,5)
+    for i in range(1,5):
+        for j in range(1,7):
+            print(str(i) + " - " + str(j))
+            temp_data = pickle.load(open('OpportunityUCIDataset/Subject_' + str(i) + '-ADL' + str(j) + '_preprocessed.txt', "rb"))
+            if flag == 0:
+                data = temp_data.values.astype(float)
+                labels = temp_data.columns.values[1:]
+                flag += 1
+            else:
+                data = np.concatenate((data,temp_data.values.astype(float)), axis=0)
+
+            del temp_data
+    
+    print(data.shape)
+    print(labels.shape)
+    
+    #indexed by subject, first two colums are activity label and trial number, others are data
+    data = pd.DataFrame(data[:,1:], index = data[:,0], columns = labels)
+    data.index.name = 'Subject'
+    
+    #delete rows with missings
+    data.replace(['na','nan','NaN', 'NaT','inf','-inf','nan'], np.nan, inplace = True)
+    data = data.dropna()
+    #just to be sure transform everything to float
+    data = data.astype(float)
+    
+    
+    # saving the file
+    pickle.dump(data, open('OpportunityUCIDataset/full_preprocessed_dataset.txt','wb'), pickle.HIGHEST_PROTOCOL)
+    
     return 1
     
     
@@ -136,7 +181,8 @@ def load_set(window_size, overlay):
 def preprocess(window_size, overlay):
     
     if os.path.exists('OpportunityUCIDataset/OpportunityUCIDataset'):
-        return load_set(window_size, overlay)
+        load_set(window_size, overlay) # - > uncomment TODO!!!
+        concat_frames()
         
     else:
         print("The specified dataset is not available/doesnt exsist")

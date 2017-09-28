@@ -2,17 +2,9 @@ import os
 from scipy import io
 import numpy as np
 import pandas as pd
+import pickle
 
 #WARD1
-
-def utils(dataset):
-    
-    temp = dataset[1:,0:3]
-    tuples = list(zip(*temp.transpose()))
-    index = pd.MultiIndex.from_tuples(tuples, names=dataset[0,0:3])
-    df = pd.DataFrame(dataset[1:,3:], index=index, columns=dataset[0,3:])
-    
-    return df
 
 def sliding_window(dataset, window_size, overlay):
     
@@ -26,15 +18,17 @@ def sliding_window(dataset, window_size, overlay):
     for i in range(0,dataset.shape[1]):
         raw_sensor = X = np.empty(shape=[0, dataset[0,i].shape[1] * window_size])
         
-        #sliding the window (+1 ??)
+        #sliding the window
         for j in range(0, dataset[0,i].shape[0] - window_size +1, window_size - overlay):
             raw_window = np.array(dataset[0,i][j : j + window_size]).reshape(1, dataset[0,i].shape[1] * window_size)
             raw_sensor = np.concatenate( (raw_sensor, raw_window), axis=0 )
-        
+            
+            del raw_window
+            
         #join the arrays/matrices
         raw_data = np.concatenate((raw_data, np.array(raw_sensor)), axis=1)
         
-    #print(raw_data.shape)
+        del raw_sensor
         
         
     return raw_data
@@ -45,19 +39,20 @@ def sliding_window(dataset, window_size, overlay):
 def load_set(window_size, overlay):
     
     #activity array
-    activities = ["Rest at Standing",
-                "Rest at Sitting",
-                "Rest at Lying",
-                "Walk forward",
-                "Walk forward left-circle",
-                "Walk forward right-circle",
-                "Turn left",
-                "Turn right",
-                "Go upstairs",
-                "Go downstairs",
-                "Jog",
-                "Jump",
-                "Push"]
+    #what it should be -> now only integers
+    #activities = ["Rest at Standing",
+    #            "Rest at Sitting",
+    #            "Rest at Lying",
+    #            "Walk forward",
+    #            "Walk forward left-circle",
+    #            "Walk forward right-circle",
+    #            "Turn left",
+    #            "Turn right",
+    #            "Go upstairs",
+    #            "Go downstairs",
+    #            "Jog",
+    #            "Jump",
+    #            "Push"]
     
     raw_data = []
     labels = []
@@ -76,7 +71,7 @@ def load_set(window_size, overlay):
                 try:
                     sensors = io.loadmat('WARD1/WARD1.0/Subject'+str(i)+'/a'+str(j)+'t'+str(k)+'.mat')['WearableData'][0,0][5]
                     # [subject, activity, trial]
-                    temp_labels = np.array([[i, activities[j-1], k]])
+                    temp_labels = np.array([[i, j, k]])
                 
                     #concat matrices of processed raw data
                     if i == 1 and j == 1 and k == 1:
@@ -85,6 +80,8 @@ def load_set(window_size, overlay):
                     else:
                         raw_data = np.concatenate( (raw_data, sliding_window(sensors, window_size, overlay)), axis = 0)
                         labels = np.concatenate( (labels, np.repeat(temp_labels, raw_data.shape[0] - labels.shape[0], axis = 0)), axis = 0)
+                        
+                    del temp_labels
                 #skip missing files
                 except OSError as e:
                     continue
@@ -103,19 +100,42 @@ def load_set(window_size, overlay):
                          "s"+str(i)+"_gyro_y"+str(j)]]
             header = np.concatenate( (header, np.array(measures)), axis = 1)
     
-    #print("Raw_data shape: " + str(raw_data.shape))
     
     # add labels and attribute names to the raw data
     data = np.concatenate( (labels, raw_data), axis = 1)
-    data = np.concatenate( (header, data), axis = 0 )
+    
+    print("Raw: " + str(raw_data.nbytes / 1024))
+    print("Data: " + str(raw_data.nbytes / 1024))
+    
+    del labels
+    del raw_data
     
     #print("Data: " + str(data.shape))
     
-    return utils(data)
+    data = pd.DataFrame(data[:,1:], index=data[:,0], columns=header[0,1:])
+    data.index.name = header[0,0]
+    
+    del header
+    
+    
+    #delete rows with missings
+    data.replace(['na','nan','NaN', 'NaT','inf','-inf','nan'], np.nan, inplace = True)
+    data = data.dropna()
+    #just to be sure transform everything to float
+    data = data.astype(float)
+    
+    
+    
+    pickle.dump(data, open('WARD1/processed_data.txt','wb'), pickle.HIGHEST_PROTOCOL)
+    
+    return 1
     
     
 def preprocess(window_size, overlay):
     
+    if window_size <= overlay:
+        print("Error: Window size and/or overlay")
+        exit()
     
     if os.path.exists('WARD1/WARD1.0'):
         return load_set(window_size, overlay)
