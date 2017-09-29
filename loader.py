@@ -2,13 +2,13 @@ import os
 from subprocess import call
 import WARD1_dataset_preprocesser as ward
 import opportunity_dataset_preprocessor as opportunity
-import REALDISP_dataset_preprocessor as realdisp
-import enex_dataset_preprocessor as enex
+import daily_sports_preprocessor as daily_sports
 
 
 class Loader:
     
     dataset_name = ""
+    dataset_zip = ""
     dataset_url = ""
     dataset_unzip = ""
     dataset_unzipAdd = "Imagine"
@@ -19,7 +19,7 @@ class Loader:
 
         #Load
         print("Downloading...")
-        if not os.path.exists(self.dataset_name + '/' + self.dataset_name + '.zip'):
+        if not os.path.exists(self.dataset_zip + '.zip'):
             call(
                 'wget "'+ self.dataset_url + '" -P "' + self.dataset_name + '/"',
                 shell=True
@@ -31,23 +31,29 @@ class Loader:
 
         #Unzip
         print("Extracting...")
-        extract_directory = os.path.abspath(self.dataset_unzip + '/' + self.dataset_unzip)
-        if not os.path.exists(extract_directory) and not os.path.exists(self.dataset_name + '/' + self.dataset_unzipAdd) :
+        extract_directory = os.path.abspath(self.dataset_unzip)
+        if not os.path.exists(extract_directory):
             call(
-                'unzip -nq "' + self.dataset_name + '/' + self.dataset_name + '.zip"',
+                'unzip -nq "' + self.dataset_unzip + '.zip"',
                 shell=True
             )
             print("Extracting successfully done to {}.".format(extract_directory))
         else:
             print("Dataset already extracted. Did not extract twice.\n")
 
+            
+            
  #Loads and preprocessing calls:
+
+
  # WARD1 dataset
+    
     def ward1_load(self):
         
         self.dataset_name = "WARD1"
         self.dataset_url = "https://people.eecs.berkeley.edu/~yang/software/WAR/WARD1.zip"
-        self.dataset_unzip = "WARD1.0"
+        self.dataset_unzip = "WARD1/WARD1.0"
+        self.dataset_zip = "WARD1/WARD1"
         
         self.load_unzip()
         
@@ -55,12 +61,15 @@ class Loader:
     def ward1_preprocess(self, window_size, overlay):
         return ward.preprocess(window_size, overlay)
       
+        
  #OPPORTUNITY dataset
+
     def opportunity_load(self):
         
         self.dataset_name = "OpportunityUCIDataset"
         self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip"
-        self.dataset_name = "OpportunityUCIDataset"
+        self.dataset_unzip = "OpportunityUCIDataset/OpportunityUCIDataset"
+        self.dataset_zip = "OpportunityUCIDataset/OpportunityUCIDataset"
         
         self.load_unzip()
         
@@ -70,36 +79,27 @@ class Loader:
         #produces a pickled file for every trial due to some RAM problems
         
         return opportunity.preprocess(window_size, overlay)
-    
-    
- #REALDISP Activity Recognition Dataset -> not implemented yet
-    def realdisp_load(self):
-        
-        self.dataset_name = "realistic_sensor_displacement"
-        self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00305/realistic_sensor_displacement.zip"
-        self.dataset_unzip = "subject1_ideal"
-        self.dataset_unzipAdd = "subject1_ideal.log"
-        
-        self.load_unzip()
         
  
- #Energy expenditure dataset  -> partially implemented, has problems with labels
+ #Daily and sports activities data set
 
-    
-    def enex_load(self):
+    def daily_sports_load(self):
         
-        self.dataset_name = "EnEx"
-        self.dataset_url = "https://www5.cs.fau.de/fileadmin/research/datasets/ActivityNet/EnEx.zip"
-        self.dataset_unzip = "EnEx"
+        self.dataset_name = "Daily and sports activities"
+        self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00256/data.zip"
+        self.dataset_unzip = "Daily and sports activities/data"
+        self.dataset_zip = "Daily and sports activities/data"
 
         self.load_unzip()
         
         
-    def enex_preprocess(self, window_size, overlay):
+    def daily_sports_preprocess(self, window_size, overlay):
         
         #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
         
-        return enex.preprocess(window_size, overlay)
-    
+        return daily_sports.preprocess(window_size, overlay)
 
+    
+    
+    
     
