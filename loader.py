@@ -3,7 +3,8 @@ from subprocess import call
 import WARD1_dataset_preprocesser as ward
 import opportunity_dataset_preprocessor as opportunity
 import daily_sports_preprocessor as daily_sports
-
+import PAMAP2_preprocessor as pamap2
+import skoda_preprocessor as skoda
 
 class Loader:
     
@@ -11,7 +12,6 @@ class Loader:
     dataset_zip = ""
     dataset_url = ""
     dataset_unzip = ""
-    dataset_unzipAdd = "Imagine"
 
     def load_unzip(self):
 
@@ -100,6 +100,39 @@ class Loader:
         return daily_sports.preprocess(window_size, overlay)
 
     
+# PAMAP2
+
+    def pamap2_load(self):
+        
+        self.dataset_name = "PAMAP2"
+        self.dataset_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/00231/PAMAP2_Dataset.zip"
+        self.dataset_unzip = "PAMAP2/PAMAP2_Dataset"
+        self.dataset_zip = "PAMAP2/PAMAP2_Dataset"
+
+        self.load_unzip()
+        
+        
+    def pamap2_preprocess(self, window_size, overlay):
+        
+        #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
+        
+        return pamap2.preprocess(window_size, overlay)
+    
+    
+# Skoda mini Checkpoint
+
+    def skoda_preprocess(self, window_size, overlay):
+        
+        #makes 2 pickled files for two different sensor locations (left and right)
+        
+        return skoda.preprocess(window_size, overlay)
+
+
+
+
+
+
+
     
     
     
