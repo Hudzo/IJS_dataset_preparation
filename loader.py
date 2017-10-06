@@ -5,6 +5,7 @@ import opportunity_dataset_preprocessor as opportunity
 import daily_sports_preprocessor as daily_sports
 import PAMAP2_preprocessor as pamap2
 import skoda_preprocessor as skoda
+import hci_preprocessor as hci
 
 class Loader:
     
@@ -127,6 +128,14 @@ class Loader:
         
         return skoda.preprocess(window_size, overlay)
 
+    
+# HCI data set
+
+    def hci_preprocess(self, window_size, overlay):
+        
+        #makes 2 pickled files for two different sensor locations (left and right)
+        
+        return hci.preprocess(window_size, overlay)
 
 
 
