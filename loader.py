@@ -6,6 +6,7 @@ import daily_sports_preprocessor as daily_sports
 import PAMAP2_preprocessor as pamap2
 import skoda_preprocessor as skoda
 import hci_preprocessor as hci
+import chiron_first_preprocessor as chiron_first
 
 class Loader:
     
@@ -20,7 +21,7 @@ class Loader:
 
         #Load
         print("Downloading...")
-        if not os.path.exists(self.dataset_zip + '.zip'):
+        if not os.path.exists(self.dataset_zip):
             call(
                 'wget "'+ self.dataset_url + '" -P "' + self.dataset_name + '/"',
                 shell=True
@@ -54,7 +55,7 @@ class Loader:
         self.dataset_name = "WARD1"
         self.dataset_url = "https://people.eecs.berkeley.edu/~yang/software/WAR/WARD1.zip"
         self.dataset_unzip = "WARD1/WARD1.0"
-        self.dataset_zip = "WARD1/WARD1"
+        self.dataset_zip = "WARD1/WARD1.zip"
         
         self.load_unzip()
         
@@ -70,7 +71,7 @@ class Loader:
         self.dataset_name = "OpportunityUCIDataset"
         self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00226/OpportunityUCIDataset.zip"
         self.dataset_unzip = "OpportunityUCIDataset/OpportunityUCIDataset"
-        self.dataset_zip = "OpportunityUCIDataset/OpportunityUCIDataset"
+        self.dataset_zip = "OpportunityUCIDataset/OpportunityUCIDataset.zip"
         
         self.load_unzip()
         
@@ -89,7 +90,7 @@ class Loader:
         self.dataset_name = "Daily and sports activities"
         self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00256/data.zip"
         self.dataset_unzip = "Daily and sports activities/data"
-        self.dataset_zip = "Daily and sports activities/data"
+        self.dataset_zip = "Daily and sports activities/data.zip"
 
         self.load_unzip()
         
@@ -108,7 +109,7 @@ class Loader:
         self.dataset_name = "PAMAP2"
         self.dataset_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/00231/PAMAP2_Dataset.zip"
         self.dataset_unzip = "PAMAP2/PAMAP2_Dataset"
-        self.dataset_zip = "PAMAP2/PAMAP2_Dataset"
+        self.dataset_zip = "PAMAP2/PAMAP2_Dataset.zip"
 
         self.load_unzip()
         
@@ -138,9 +139,23 @@ class Loader:
         return hci.preprocess(window_size, overlay)
 
 
+# Chiron_first data set
 
+    def chiron_first_load(self):
+        
+        self.dataset_name = "Chiron first"
+        self.dataset_url = "https://dis.ijs.si/ami-repository/download.php?id=11"
+        self.dataset_unzip = "Chiron first/Smart-first_phase.csv"
+        self.dataset_zip = "Chiron first/Smart-first_phase.csv"
 
-
+        self.load_unzip()
+        
+        
+    def chiron_first_preprocess(self, window_size, overlay):
+        
+        #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
+        
+        return chiron_first.preprocess(window_size, overlay)
 
     
     
