@@ -11,4 +11,5 @@ To test the loader/pre-processor run the tester program and uncomment the lines 
 
 Currently the standardized shape of the output data set produced by the preprocessor code is the following:
 
-Index: Subject number      |  Activity number   |  Trial number  |   Sliding window of raw data   |
+
+#### Index: Subject number      |  Activity number   |  Trial number  |   Sliding window of raw data   |
