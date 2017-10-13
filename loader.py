@@ -7,6 +7,7 @@ import PAMAP2_preprocessor as pamap2
 import skoda_preprocessor as skoda
 import hci_preprocessor as hci
 import chiron_preprocessor as chiron
+import realdisp_preprocessor as realdisp
 
 class Loader:
     
@@ -166,4 +167,20 @@ class Loader:
         
         return chiron.preprocess(window_size, overlay, 2)
     
+    
+# REALDISP data set
+
+    def realdisp_load(self):
+        
+        self.dataset_name = "REALDISP"
+        self.dataset_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00305/realistic_sensor_displacement.zip"
+        self.dataset_unzip = "REALDISP/realistic_sensor_displacement"
+        self.dataset_zip = "REALDISP/realistic_sensor_displacement"
+
+        self.load_unzip()
+        
+        
+    def realdisp_preprocess(self, window_size, overlay):
+        
+        return realdisp.preprocess(window_size, overlay)
     
