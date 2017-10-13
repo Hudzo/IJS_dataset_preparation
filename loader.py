@@ -6,7 +6,7 @@ import daily_sports_preprocessor as daily_sports
 import PAMAP2_preprocessor as pamap2
 import skoda_preprocessor as skoda
 import hci_preprocessor as hci
-import chiron_first_preprocessor as chiron_first
+import chiron_preprocessor as chiron
 
 class Loader:
     
@@ -116,8 +116,6 @@ class Loader:
         
     def pamap2_preprocess(self, window_size, overlay):
         
-        #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
-        
         return pamap2.preprocess(window_size, overlay)
     
     
@@ -125,16 +123,12 @@ class Loader:
 
     def skoda_preprocess(self, window_size, overlay):
         
-        #makes 2 pickled files for two different sensor locations (left and right)
-        
         return skoda.preprocess(window_size, overlay)
 
     
 # HCI data set
 
     def hci_preprocess(self, window_size, overlay):
-        
-        #makes 2 pickled files for two different sensor locations (left and right)
         
         return hci.preprocess(window_size, overlay)
 
@@ -153,10 +147,23 @@ class Loader:
         
     def chiron_first_preprocess(self, window_size, overlay):
         
-        #makes 2 pickled files for two different approaches to measurement (traditional and oscillation)
-        
-        return chiron_first.preprocess(window_size, overlay)
+        return chiron.preprocess(window_size, overlay, 1)
 
     
+# Chiron_second data set
+
+    def chiron_second_load(self):
+        
+        self.dataset_name = "Chiron second"
+        self.dataset_url = "https://dis.ijs.si/ami-repository/download.php?id=12"
+        self.dataset_unzip = "Chiron second/Smart-second_phase.csv"
+        self.dataset_zip = "Chiron second/Smart-second_phase.csv"
+
+        self.load_unzip()
+        
+        
+    def chiron_second_preprocess(self, window_size, overlay):
+        
+        return chiron.preprocess(window_size, overlay, 2)
     
     
