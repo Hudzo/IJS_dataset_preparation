@@ -180,8 +180,8 @@ def concat_frames():
 #OK 
 def preprocess(window_size, overlay):
     
-    if os.path.exists('OpportunityUCIDataset/OpportunityUCIDataset'):
-        load_set(window_size, overlay) # - > uncomment TODO!!!
+    if os.path.exists('OpportunityUCIDataset/OpportunityUCIDataset/dataset'):
+        load_set(window_size, overlay)
         concat_frames()
         
     else:

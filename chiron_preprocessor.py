@@ -191,7 +191,6 @@ def preprocess(window_size, overlay, num_set):
     
     if (num_set == 1 and os.path.exists('Chiron first/Smart-first_phase.csv')) or (num_set == 2 and os.path.exists('Chiron second/Smart-second_phase.csv')): 
         num_subjects = load_set(window_size, overlay, num_set)
-        #num_subjects = 3 #..... Delete
         merge_subjects(window_size, num_subjects, num_set)
         return 1
         
