@@ -43,13 +43,21 @@ class Loader:
             print("Extracting successfully done to {}.".format(extract_directory))
         else:
             print("Dataset already extracted. Did not extract twice.\n")
+            
+        #Add an additional folder for results
+        if not os.path.exists('"' + self.dataset_name + '/Results"'):
+            call(
+                'mkdir -p "' + self.dataset_name + '/Results"',
+                shell=True
+            )
+            print("Successfully created additional folder: Results")
 
             
             
- #Loads and preprocessing calls:
+#Loads and preprocessing calls:
 
 
- # WARD1 dataset
+# WARD1 dataset
     
     def ward1_load(self):
         
@@ -65,7 +73,7 @@ class Loader:
         return ward.preprocess(window_size, overlay)
       
         
- #OPPORTUNITY dataset
+#OPPORTUNITY dataset
 
     def opportunity_load(self):
         
@@ -83,8 +91,8 @@ class Loader:
         
         return opportunity.preprocess(window_size, overlay)
         
- 
- #Daily and sports activities data set
+        
+#Daily and sports activities data set
 
     def daily_sports_load(self):
         
