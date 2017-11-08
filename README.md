@@ -15,3 +15,7 @@ Currently the standardized shape of the output data set produced by the preproce
 #### Index: Subject number      |  Activity number   |  Trial number  |    X    |   Sliding window of raw data   |
 
 X ...... possible additional singular attributes (heart rate / scenario number ...)
+
+
+Note:
+-Skoda mini Checkopint and HCI datasets need to be downlaoded manually
