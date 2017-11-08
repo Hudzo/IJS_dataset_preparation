@@ -15,6 +15,7 @@ class Loader:
     dataset_zip = ""
     dataset_url = ""
     dataset_unzip = ""
+    folders = ["Basic regression network", "Basic LSTM network", "Basic bidirectional stacked LSTMs", "3x3 HAR stacked residual bidirectional LSTMs", "Basic ConvLSTM"]
 
     def load_unzip(self):
 
@@ -51,7 +52,16 @@ class Loader:
                 shell=True
             )
             print("Successfully created additional folder: Results")
-
+        
+        #add subfolders to Results for more convinience
+        for fold in self.folders:
+            if not os.path.exists('"/Results/' + fold + '"'):
+                call(
+                    'mkdir -p "' + self.dataset_name + '/Results/' + fold + '"',
+                    shell=True
+                )
+        print("Successfully created additional folders for results")
+        
             
             
 #Loads and preprocessing calls:
