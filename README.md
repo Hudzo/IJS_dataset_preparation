@@ -1,4 +1,4 @@
-# IJS_dataset_preparation
+## IJS dataset preparation and neural networks <br />
 
 Loader.py as the name says loads and unzips the data set to the working directory using the code from loader.py
 
@@ -12,10 +12,10 @@ To test the loader/pre-processor run the tester program and uncomment the lines 
 Currently the standardized shape of the output data set produced by the preprocessor code is the following:
 
 
-#### Index: Subject number      |  Activity number   |  Trial number  |    X    |   Sliding window of raw data   |
+#### Index: Subject number      |  Activity number   |  Trial number  |    X    |   Sliding window of raw data   | <br />
 
-X ...... possible additional singular attributes (heart rate / scenario number ...)
+X ...... possible additional singular attributes (heart rate / scenario number ...) <br />
 
 
-Note:
+Note: <br />
 -Skoda mini Checkopint and HCI datasets need to be downlaoded manually
