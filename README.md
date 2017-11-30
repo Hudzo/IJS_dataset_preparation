@@ -18,4 +18,15 @@ X ...... possible additional singular attributes (heart rate / scenario number .
 
 
 Note: <br />
--Skoda mini Checkopint and HCI datasets need to be downlaoded manually
+-Skoda mini Checkopint and HCI datasets need to be downlaoded manually <br />
+
+#### Instructions: <br />
+
+1) Run the stadardized classifier in jupyter notebook
+2) In the second wrapper uncomment the dataset you want to use <br />
+  2.1) Uncomment _load() and _preprocess for preprocessing the dataset (can be done once and left commented after that) <br />
+  2.2) Uncomment Path="name of dataset" and df = pickle.load(dataset) <br />
+  2.3) Set sliding window and overlay (use the comments on the right of the _preprocess() as a guide) <br />
+3) Run all the wrappers untill the title Basic Regression
+4) Run the Neural nets you want
+5) After a neural net finishes running the results are located in "dataset_name"/Results/"neural_net_you_just_ran"
