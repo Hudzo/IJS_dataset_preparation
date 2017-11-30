@@ -160,6 +160,7 @@ def concat_frames():
     print(labels.shape)
     
     #indexed by subject, first two colums are activity label and trial number, others are data
+    labels[1] = "Activity"
     data = pd.DataFrame(data[:,1:], index = data[:,0], columns = labels)
     data.index.name = 'Subject'
     
